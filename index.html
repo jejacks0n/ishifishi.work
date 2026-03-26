@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>:: ishifishi ::</title>
+
+  <meta name="description" content="ishifishi.work :: where the ethe(real) work gets done">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ishifishi.work">
+  <meta property="og:title" content=":: ishifishi ::">
+  <meta property="og:description" content="ishifishi.work :: where the ethe(real) work gets done">
+  <meta property="og:image" content="https://ishifishi.work/og-image.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://ishifishi.work">
+  <meta name="twitter:title" content=":: ishifishi ::">
+  <meta name="twitter:description" content="ishifishi.work :: where the ethe(real) work gets done">
+  <meta name="twitter:image" content="https://ishifishi.work/og-image.png">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #050505;
+      overflow: hidden;
+    }
+
+    main {
+      position: relative;
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+    }
+
+    main::after {
+      position: absolute;
+      content: "";
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 2px,
+        rgba(0, 0, 0, 0.15) 2px,
+        rgba(0, 0, 0, 0.15) 4px
+      );
+      animation: scanline-flicker 0.1s steps(2) infinite;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(1.2) contrast(1.1) saturate(1.2);
+    }
+
+    img {
+      position: absolute;
+      top: 5vh;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: 30vh;
+      min-height: 150px;
+      object-fit: contain;
+      image-rendering: pixelated;
+      filter: url(#neon-glow);
+      mix-blend-mode: screen;
+      z-index: 10;
+      animation: logo-drift 8s ease-in-out infinite alternate;
+    }
+
+    @keyframes scanline-flicker {
+      0% { opacity: 0.8; }
+      100% { opacity: 1; }
+    }
+
+    @keyframes logo-drift {
+      from { transform: translateY(0) rotate(-1deg); }
+      to { transform: translateY(15px) rotate(1deg); }
+    }
+  </style>
+</head>
+<body>
+
+<main>
+  <video autoplay muted playsinline>
+    <source src="video.mp4" type="video/mp4">
+  </video>
+  <img src="logo.png">
+</main>
+
+<svg style="position: absolute; width: 0; height: 0;">
+  <filter id="neon-glow" x="-50%" y="-50%" width="200%" height="200%">
+    <feColorMatrix in="SourceGraphic" type="luminanceToAlpha" result="mask"/>
+    <feFlood flood-color="#FFFFFF" result="white-color"/>
+    <feComposite in="white-color" in2="mask" operator="in" result="white-pixels"/>
+    <feComponentTransfer in="white-pixels" result="white-boosted">
+      <feFuncR type="linear" slope="2"/>
+      <feFuncG type="linear" slope="2"/>
+      <feFuncB type="linear" slope="2"/>
+    </feComponentTransfer>
+    <feFlood flood-color="#FF00FF" result="magenta-color"/>
+    <feComposite in="magenta-color" in2="mask" operator="in" result="magenta-pixels"/>
+    <feGaussianBlur in="magenta-pixels" stdDeviation="4"  result="blur1"/>
+    <feGaussianBlur in="magenta-pixels" stdDeviation="15" result="blur2"/>
+    <feGaussianBlur in="magenta-pixels" stdDeviation="35" result="blur3"/>
+    <feBlend in="blur1" in2="blur2" mode="screen" result="glow1"/>
+    <feBlend in="glow1" in2="blur3" mode="screen" result="glow-blended"/>
+    <feComponentTransfer in="glow-blended" result="glow-final">
+      <feFuncA type="linear" slope="3"/>
+    </feComponentTransfer>
+    <feMerge>
+      <feMergeNode in="glow-final"/>
+      <feMergeNode in="white-boosted"/>
+    </feMerge>
+  </filter>
+</svg>
+</body>
+</html>
