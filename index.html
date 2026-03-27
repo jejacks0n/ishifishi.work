@@ -6,6 +6,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>:: ishifishi ::</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 
   <meta name="description" content="ishifishi.work :: where the ethe(real) work gets done">
 
@@ -21,6 +23,32 @@
   <meta name="twitter:description" content="ishifishi.work :: where the ethe(real) work gets done">
   <meta name="twitter:image" content="https://ishifishi.work/og-image.png">
   <style>
+    @keyframes scanline-flicker {
+      0% { opacity: 0.8; }
+      100% { opacity: 1; }
+    }
+
+    @keyframes logo-drift {
+      from { transform: translateY(0) rotate(-1deg); }
+      to { transform: translateY(15px) rotate(1deg); }
+    }
+
+    @keyframes glitch-in {
+      0%   { opacity: 0; }
+      10%  { opacity: 0.9; }
+      15%  { opacity: 0; }
+      25%  { opacity: 0.7; }
+      30%  { opacity: 0; }
+      45%  { opacity: 1; }
+      50%  { opacity: 0.1; }
+      60%  { opacity: 0.8; }
+      65%  { opacity: 0; }
+      75%  { opacity: 1; }
+      80%  { opacity: 0.3; }
+      90%  { opacity: 1; }
+      100% { opacity: 1; }
+    }
+
     body, html {
       margin: 0;
       padding: 0;
@@ -64,7 +92,7 @@
 
     img {
       position: absolute;
-      top: 5vh;
+      top: 8vh;
       left: 0;
       right: 0;
       width: 100%;
@@ -78,24 +106,51 @@
       animation: logo-drift 8s ease-in-out infinite alternate;
     }
 
-    @keyframes scanline-flicker {
-      0% { opacity: 0.8; }
-      100% { opacity: 1; }
+    div {
+      position: absolute;
+      inset: 0;
+      background: #a434bd;
+      opacity: 0;
+      z-index: 3;
+      pointer-events: none;
     }
 
-    @keyframes logo-drift {
-      from { transform: translateY(0) rotate(-1deg); }
-      to { transform: translateY(15px) rotate(1deg); }
+    div.active {
+      animation: glitch-in 1.5s steps(1) forwards;
+    }
+
+    p {
+      position: absolute;
+      inset: 0;
+      z-index: 6;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 2rem 2rem 30vh;
+      font-family: 'VT323', monospace;
+      font-size: clamp(1.4rem, 4vw, 3rem);
+      color: #f3e9ff;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      text-shadow: 0 0 3px rgba(216, 98, 255, 0.95), 0 0 10px rgba(233, 176, 255, 0.95);
+      transition: opacity 0.6s;
+    }
+
+    p:not(:empty) {
+      opacity: 1;
     }
   </style>
 </head>
 <body>
 
 <main>
-  <video autoplay muted playsinline>
-    <source src="video.mp4" type="video/mp4">
+  <video id="whaleVideo" autoplay muted playsinline>
+    <source src="video.mp4" type="video/mp4"/>
   </video>
-  <img src="logo.png">
+  <div></div>
+  <p></p>
+  <img src="logo.png" alt=""/>
 </main>
 
 <svg style="position: absolute; width: 0; height: 0;">
@@ -124,5 +179,58 @@
     </feMerge>
   </filter>
 </svg>
+<script>
+  const video = document.querySelector('video');
+  const overlay = document.querySelector('div');
+  const tagline = document.querySelector('p');
+
+  const quotes = [
+    "where the ethe(real) work gets done",
+    "shipping vibes to prod since the before times",
+    "null island, full presence",
+    "undefined behavior, intentional aesthetic",
+    "404: work-life balance not found",
+    "async by nature, synced by choice",
+    "this is fine. the glow is decorative.",
+    "git push origin feelings",
+    "the latency is part of the vibe",
+    "deploying consciousness to the void",
+    "infinite scroll, finite attention",
+    "in production we trust",
+    "the bug is a feature now",
+    "on the bleeding edge of standing still",
+    "eventually consistent, perpetually confused",
+    "side effects may include clarity",
+    "the stack is immaculate. the soul is not.",
+    "works on my machine",
+    "rendering the ineffable since always",
+    "garbage collected, heart intact",
+    "strongly typed, loosely held",
+    "hot reload. cold takes.",
+    "the semicolon is always silent",
+    "you are now leaving the main thread",
+    "everything is a service if you're brave enough",
+    "branch: main. mood: detached.",
+    "the dark mode was within us all along",
+    "make code not war",
+  ];
+
+  function streamText(quote) {
+    tagline.textContent = '';
+    let i = 0;
+    const interval = setInterval(() => {
+      tagline.textContent = quote.slice(0, ++i);
+      if (i >= quote.length) clearInterval(interval);
+    }, 55);
+  }
+
+  video.addEventListener('timeupdate', () => {
+    if (!overlay.classList.contains('active') && video.duration - video.currentTime <= 1.5) {
+      overlay.classList.add('active');
+      const quote = quotes[Math.floor(Math.random() * quotes.length)];
+      setTimeout(() => streamText(quote), 1700);
+    }
+  });
+</script>
 </body>
 </html>
