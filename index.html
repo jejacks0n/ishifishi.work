@@ -54,7 +54,7 @@
       padding: 0;
       width: 100%;
       height: 100%;
-      background: #a434bd;
+      background: #a03f99;
       overflow: hidden;
     }
 
@@ -110,7 +110,7 @@
     div {
       position: absolute;
       inset: 0;
-      background: #a434bd;
+      background: #a03f99;
       opacity: 0;
       z-index: 3;
       pointer-events: none;
@@ -134,8 +134,8 @@
       text-align: center;
       opacity: 0;
       pointer-events: none;
-      text-shadow: 0 0 3px rgba(216, 98, 255, 0.95), 0 0 10px rgba(233, 176, 255, 0.95);
-      transition: opacity 0.6s;
+      text-shadow: 0 0 2px #fff, 0 0 15px rgba(233, 176, 255, 0.95);
+      transition: opacity 0.3s;
     }
 
     p:not(:empty) {
@@ -146,7 +146,7 @@
 <body>
 
 <main>
-  <video id="whaleVideo" autoplay muted playsinline>
+  <video autoplay muted playsinline>
     <source src="video.mp4" type="video/mp4"/>
   </video>
   <div></div>
@@ -226,7 +226,7 @@
   }
 
   video.addEventListener('timeupdate', () => {
-    if (!overlay.classList.contains('active') && video.duration - video.currentTime <= 1.5) {
+    if (!overlay.classList.contains('active') && video.duration - video.currentTime <= 2.5) {
       overlay.classList.add('active');
       const quote = quotes[Math.floor(Math.random() * quotes.length)];
       setTimeout(() => streamText(quote), 1700);
